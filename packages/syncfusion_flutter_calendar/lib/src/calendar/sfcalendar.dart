@@ -167,6 +167,7 @@ class SfCalendar extends StatefulWidget {
     this.headerHeight = 40,
     this.viewHeaderHeight = -1,
     this.todayHighlightColor,
+    this.timeIndicatorColor,
     this.todayTextStyle,
     this.cellBorderColor,
     this.backgroundColor,
@@ -1141,6 +1142,31 @@ class SfCalendar extends StatefulWidget {
   ///
   /// ```
   final Color? todayHighlightColor;
+
+  /// The color for the current time indicator line in [SfCalendar].
+  ///
+  /// Defaults to null. When null, defaults to [todayHighlightColor].
+  ///
+  /// This color is used for the horizontal line that shows the current time
+  /// in time slot views (day, week, workweek, timeline views).
+  ///
+  /// See also:
+  /// * [showCurrentTimeIndicator], to display the time indicator line.
+  /// * [todayHighlightColor], to customize the today cell highlighting.
+  ///
+  /// ```dart
+  /// Widget build(BuildContext context) {
+  ///   return Container(
+  ///     child: SfCalendar(
+  ///       view: CalendarView.week,
+  ///       showCurrentTimeIndicator: true,
+  ///       timeIndicatorColor: Colors.red,
+  ///       todayHighlightColor: Colors.blue,
+  ///     ),
+  ///   );
+  /// }
+  /// ```
+  final Color? timeIndicatorColor;
 
   /// The text style for the today text in [SfCalendar].
   ///

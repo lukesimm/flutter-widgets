@@ -9896,7 +9896,8 @@ class _CalendarViewState extends State<_CalendarView>
           widget.calendar.timeSlotViewSettings,
           isTimelineView,
           widget.visibleDates,
-          widget.calendar.todayHighlightColor ??
+          widget.calendar.timeIndicatorColor ??
+              widget.calendar.todayHighlightColor ??
               widget.calendarTheme.todayHighlightColor,
           _isRTL,
           _currentTimeNotifier,
@@ -14810,7 +14811,7 @@ class _CurrentTimeIndicator extends CustomPainter {
     this.timeSlotViewSettings,
     this.isTimelineView,
     this.visibleDates,
-    this.todayHighlightColor,
+    this.timeIndicatorColor,
     this.isRTL,
     ValueNotifier<int> repaintNotifier,
     this.timeZone,
@@ -14820,7 +14821,7 @@ class _CurrentTimeIndicator extends CustomPainter {
   final bool isTimelineView;
   final List<DateTime> visibleDates;
   final double timeRulerSize;
-  final Color? todayHighlightColor;
+  final Color? timeIndicatorColor;
   final bool isRTL;
   final String timeZone;
 
@@ -14873,7 +14874,7 @@ class _CurrentTimeIndicator extends CustomPainter {
       minuteHeight,
     );
     final Paint painter = Paint()
-      ..color = todayHighlightColor!
+      ..color = timeIndicatorColor!
       ..strokeWidth = 1
       ..isAntiAlias = true
       ..style = PaintingStyle.fill;
