@@ -4405,6 +4405,18 @@ class _SfCalendarState extends State<SfCalendar>
               currentViewDate.year != _headerUpdateNotifier.value!.year) {
             _controller.displayDate = currentViewDate;
             _headerUpdateNotifier.value = currentViewDate;
+
+            /// Schedule view does not raise onViewChanged on scroll like the
+            /// other views' CustomCalendarScrollView path does. Emit it here on
+            /// a month/year boundary so a host app can keep a shared display
+            /// date in sync across views. (C&C Ch17 patch — forward scroll.)
+            if (CalendarViewHelper.shouldRaiseViewChangedCallback(
+              widget.onViewChanged,
+            )) {
+              CalendarViewHelper.raiseViewChangedCallback(widget, <DateTime>[
+                currentViewDate,
+              ]);
+            }
           }
 
           break;
@@ -4446,6 +4458,18 @@ class _SfCalendarState extends State<SfCalendar>
               currentViewDate.year != _headerUpdateNotifier.value!.year) {
             _controller.displayDate = currentViewDate;
             _headerUpdateNotifier.value = currentViewDate;
+
+            /// Schedule view does not raise onViewChanged on scroll like the
+            /// other views' CustomCalendarScrollView path does. Emit it here on
+            /// a month/year boundary so a host app can keep a shared display
+            /// date in sync across views. (C&C Ch17 patch — backward scroll.)
+            if (CalendarViewHelper.shouldRaiseViewChangedCallback(
+              widget.onViewChanged,
+            )) {
+              CalendarViewHelper.raiseViewChangedCallback(widget, <DateTime>[
+                currentViewDate,
+              ]);
+            }
           }
 
           break;
