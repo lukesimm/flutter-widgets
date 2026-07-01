@@ -8568,7 +8568,31 @@ class _PickerHeaderViewState extends State<_PickerHeaderView> {
   }
 
   Widget _getHeaderText(double headerWidth, bool isMobilePlatform) {
-    return MouseRegion(
+    // Automation (Appium): expose the shown header text (e.g. "July 2026") on a
+    // keyed Semantics node so tests read it via the Flutter integration driver
+    // (find_key / semantics finder) — the live widget tree — instead of scraping
+    // driver.page_source (the native a11y tree), which flakes/drops the header
+    // content-desc after a screen reload. Value is computed with the SAME
+    // module-level _getHeaderText the painter uses (via the distinctly-named
+    // _appiumHeaderText wrapper, to avoid colliding with this method's name), so
+    // it always matches what's drawn. Key targets this node for find_key.
+    final String headerSemanticText = _appiumHeaderText(
+      widget.visibleDates.value,
+      widget.view,
+      widget.isHijri,
+      widget.numberOfWeeksInView,
+      widget.monthFormat,
+      widget.enableMultiView,
+      widget.headerStyle,
+      widget.navigationDirection,
+      widget.locale,
+      widget.localizations,
+    );
+    return Semantics(
+      key: const Key('datePicker.header'),
+      label: 'datePickerHeader',
+      value: headerSemanticText,
+      child: MouseRegion(
       onEnter: (PointerEnterEvent event) {
         if (widget.view == DateRangePickerView.century ||
             (widget.isHijri && widget.view == DateRangePickerView.decade) ||
@@ -8619,6 +8643,7 @@ class _PickerHeaderViewState extends State<_PickerHeaderView> {
           ),
           size: Size(headerWidth, widget.height),
         ),
+      ),
       ),
     );
   }
@@ -14356,6 +14381,38 @@ String _getMonthHeaderText(
 
     return text;
   }
+}
+
+/// Automation helper: distinctly-named wrapper around the module-level
+/// [_getHeaderText] so the `_PickerHeaderViewState._getHeaderText` widget method
+/// (same name, different signature) can compute the shown header string for the
+/// keyed automation Semantics node without a name collision. index fixed to 0
+/// (single-view header text). No behaviour change.
+String _appiumHeaderText(
+  List<dynamic> dates,
+  DateRangePickerView view,
+  bool isHijri,
+  int numberOfWeeksInView,
+  String? monthFormat,
+  bool enableMultiView,
+  DateRangePickerHeaderStyle headerStyle,
+  DateRangePickerNavigationDirection navigationDirection,
+  Locale locale,
+  SfLocalizations localizations,
+) {
+  return _getHeaderText(
+    dates,
+    view,
+    0,
+    isHijri,
+    numberOfWeeksInView,
+    monthFormat,
+    enableMultiView,
+    headerStyle,
+    navigationDirection,
+    locale,
+    localizations,
+  );
 }
 
 String _getHeaderText(
