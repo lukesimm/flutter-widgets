@@ -8637,6 +8637,11 @@ class _PickerHeaderViewState extends State<_PickerHeaderView> {
       width: arrowWidth,
       padding: EdgeInsets.zero,
       child: MaterialButton(
+        // Stable key for automation (Appium): the 'Backward' Semantics label
+        // alone flakes because the flattened a11y tree drops it intermittently
+        // from page_source. A Key() is resolved directly by the Flutter driver
+        // (the integration driver does NOT surface ValueKey, so use Key()).
+        key: const Key('datePicker.backwardArrow'),
         //// set splash color as transparent when arrow reaches min date(disabled)
         splashColor: prevArrowColor != arrowColor ? Colors.transparent : null,
         hoverColor: prevArrowColor != arrowColor ? Colors.transparent : null,
@@ -8681,6 +8686,8 @@ class _PickerHeaderViewState extends State<_PickerHeaderView> {
       width: arrowWidth,
       padding: EdgeInsets.zero,
       child: MaterialButton(
+        // Stable key for automation (Appium) — see backward arrow note.
+        key: const Key('datePicker.forwardArrow'),
         //// set splash color as transparent when arrow reaches max date(disabled)
         splashColor: nextArrowColor != arrowColor ? Colors.transparent : null,
         hoverColor: nextArrowColor != arrowColor ? Colors.transparent : null,
